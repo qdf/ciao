@@ -92,7 +92,7 @@ func testCreateServer(t *testing.T, n int) payloads.ComputeServers {
 
 	body := testHTTPRequest(t, "POST", url, http.StatusAccepted, b)
 
-	var servers payloads.ComputeServers
+	servers := payloads.NewComputeServers()
 
 	err = json.Unmarshal(body, &servers)
 	if err != nil {
@@ -111,7 +111,7 @@ func testListServerDetailsTenant(t *testing.T, tenantID string) payloads.Compute
 
 	body := testHTTPRequest(t, "GET", url, http.StatusOK, nil)
 
-	var s payloads.ComputeServers
+	s := payloads.NewComputeServers()
 	err := json.Unmarshal(body, &s)
 	if err != nil {
 		t.Fatal(err)
@@ -205,6 +205,7 @@ func TestShowServerDetails(t *testing.T) {
 
 		if reflect.DeepEqual(s1, s2.Server) == false {
 			t.Fatal("Server details not correct")
+			//t.Fatalf("Server details not correct %s %s", s1, s2.Server)
 		}
 	}
 }
@@ -591,7 +592,7 @@ func TestListEventsTenant(t *testing.T) {
 
 	url := computeURL + "/v2.1/" + tenant.ID + "/events"
 
-	var expected payloads.CiaoEvents
+	expected := payloads.NewCiaoEvents()
 
 	logs, err := context.ds.GetEventLog()
 	if err != nil {
@@ -662,7 +663,7 @@ func TestListTenants(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	var expected payloads.CiaoComputeTenants
+	expected := payloads.NewCiaoComputeTenants()
 
 	for _, tenant := range tenants {
 		expected.Tenants = append(expected.Tenants,
@@ -912,7 +913,7 @@ func TestListTraces(t *testing.T) {
 func TestListEvents(t *testing.T) {
 	url := computeURL + "/v2.1/events"
 
-	var expected payloads.CiaoEvents
+	expected := payloads.NewCiaoEvents()
 
 	logs, err := context.ds.GetEventLog()
 	if err != nil {
